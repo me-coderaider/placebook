@@ -1,5 +1,7 @@
 /frontend/node_modules
-/frontend/src/places
-/frontend/src/shared
+/frontend/src/places/components
+/frontend/src/shared/util
+/frontend/src/shared/components/formelements
+/frontend/src/shared/components/navigation
+
 /frontend/src/singleProblem
-/frontend/src/users
