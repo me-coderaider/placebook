@@ -3,15 +3,6 @@ const HttpError = require("../models/http-error");
 const User = require("../models/user-schema");
 const { validationResult } = require("express-validator");
 
-const DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "John Wick",
-    email: "john.wick@hightable.com",
-    password: "whoeveritis...whoevercomes",
-  },
-];
-
 const getUsers = async (req, res, next) => {
   let users;
   try {

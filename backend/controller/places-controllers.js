@@ -6,35 +6,6 @@ const HttpError = require("../models/http-error");
 const Place = require("../models/place-schema");
 const User = require("../models/user-schema");
 
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Empire State Building",
-    description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=",
-    address: "20 W 34th St., New York, NY 10001",
-    location: {
-      lat: 40.7484445,
-      lng: -73.9882393,
-    },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Paris Effile Tower",
-    description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=",
-    address: "20 W 34th St., New York, NY 10001",
-    location: {
-      lat: 40.7484445,
-      lng: -73.9882393,
-    },
-    creator: "u2",
-  },
-];
-
 const getPlaceById = async (req, res, next) => {
   // making async await as finding data might take some time
   const placeId = req.params.pid;
@@ -50,10 +21,6 @@ const getPlaceById = async (req, res, next) => {
   }
 
   if (!place) {
-    // const error=new Error('Could not find a place for the provided id.');
-    // error.code=404;
-    // throw error;
-
     const error = new HttpError(
       "Could not find a place for the provided id.",
       404
@@ -67,7 +34,6 @@ const getPlaceById = async (req, res, next) => {
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  //   let places;
   let userWithPlaces;
   try {
     userWithPlaces = await User.findById(userId).populate("places");

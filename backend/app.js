@@ -14,6 +14,18 @@ app.use(bodyParser.json());
 // basically for POST REQUESTS, it'll pick data from the body and pass it to
 //next middleware which we can use
 
+// for handling CORS error (enforced by browsers), basically setting some specific 3 headers (origin, headers, methods) to the request
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // tells which domain should have access and * means any domain
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  ); // incoming requests with these headers will be allowed
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+  next();
+});
+
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
