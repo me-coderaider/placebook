@@ -44,7 +44,7 @@ const getPlacesByUserId = async (req, res, next) => {
     );
     return next(error);
   }
-  if (!userWithPlaces || userWithPlaces.places.length === 0) {
+  if (!userWithPlaces) {
     return next(
       new HttpError("Could not find a place for the provided user id.", 404)
     );
@@ -74,7 +74,7 @@ const createPlace = async (req, res, next) => {
     title: title,
     description: description,
     address: address,
-    location: coordinates,
+    location: "sg",
     image:
       "https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=",
     creator: creator,

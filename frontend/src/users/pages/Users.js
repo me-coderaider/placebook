@@ -2,45 +2,32 @@ import React, { useEffect, useState } from "react";
 import UsersList from "../components/UsersList";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const Users = () => {
   // whenever this page loads, we want to send the request for fetching customers
   // if we directly use fetch() method for GET request, it'll be kind of infinite loop
   // which is not good, so, basically this should run when some change is detected, so we'll use useEffect hook
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedUsers, setLoadedUsers] = useState();
 
   useEffect(() => {
-    const sendRequest = async () => {
-      setIsLoading(true);
+    const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/users");
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
+        const responseData = await sendRequest(
+          "http://localhost:8080/api/users"
+        );
 
         setLoadedUsers(responseData.users);
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message);
-      }
+      } catch (err) {}
     };
-    sendRequest();
-  }, []);
-
-  const errorHandler = () => {
-    setError(null);
-  };
+    fetchUsers();
+  }, [sendRequest]);
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={errorHandler} />
+      <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
         <div className="center">
           <LoadingSpinner />
