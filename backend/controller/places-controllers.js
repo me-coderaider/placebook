@@ -67,7 +67,7 @@ const createPlace = async (req, res, next) => {
     );
   }
 
-  const { title, description, coordinates, address, creator } = req.body;
+  const { title, description, coordinates, address } = req.body;
 
   // adding places locally
   const createdPlace = new Place({
@@ -77,12 +77,12 @@ const createPlace = async (req, res, next) => {
     location: "sg",
     image:
       "https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=",
-    creator: creator,
+    creator: req.userData.userId,
   });
 
   let user;
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     const error = new HttpError(
       "Creating place failed, please try again later",
@@ -150,6 +150,11 @@ const updatePlace = async (req, res, next) => {
     );
     return next(error);
   }
+  if (updatedPlace.creator.toString() !== req.userData.userId) {
+    const error = new HttpError("You are not allowed to edit this place.", 401);
+    return next(error);
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
 
@@ -173,7 +178,7 @@ const deletePlace = async (req, res, next) => {
 
   let place;
   try {
-    place = await Place.findById(placeId).populate("creator").exec();
+    place = await Place.findById(placeId).populate("creator");
     // as we're deleting one place, then that place id should also be removed from the creators' place list, right??
     // for that we'll be using populate method and this'll work only if there is relation b/w 2 schemas
   } catch (err) {
@@ -188,6 +193,14 @@ const deletePlace = async (req, res, next) => {
     const error = new HttpError(
       "Could not find the place for the given id.",
       404
+    );
+    return next(error);
+  }
+
+  if (place.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this place.",
+      401
     );
     return next(error);
   }
