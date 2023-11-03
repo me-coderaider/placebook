@@ -65,8 +65,7 @@ const signup = async (req, res, next) => {
     name: name,
     email: email,
     password: hashedPassword,
-    image:
-      "https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=",
+    image: req.file.path,
     places: [],
   });
 

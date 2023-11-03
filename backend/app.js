@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -12,6 +13,9 @@ const HttpError = require("./models/http-error");
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
+
 // basically for POST REQUESTS, it'll pick data from the body and pass it to
 //next middleware which we can use
 
@@ -38,6 +42,11 @@ app.use((req, res, next) => {
 
 // adding error handling middleware, mainly for handling unknown request/paths
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
   if (res.headerSent) {
     return next(error);
   }
