@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -48,7 +49,10 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    app.listen(8080);
+    app.listen(
+      process.env.SERVER_PORT,
+      console.log(`server running on port ${process.env.SERVER_PORT}`)
+    );
   })
   .catch((err) => {
     console.log(err);

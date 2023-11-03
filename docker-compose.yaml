@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    container_name: pbbackend_c
+    ports:
+      - 8081:8081
+    # volumes:
+    #   - ./backend:/app
+    #   - /app/node_modules
+
+  frontend:
+    build: ./frontend
+    container_name: pbfrontend_c
+    ports:
+      - 3030:3030
+    # volumes:
+    #   - ./frontend:/app
+    #   - /app/node_modules
+    # stdin_open: true
+    # tty: true
+    # depends_on:
+    #   - server
