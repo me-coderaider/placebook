@@ -4,3 +4,4 @@
 /backend/.env
 /backend/cert
 /backend/uploads
+/nginx
